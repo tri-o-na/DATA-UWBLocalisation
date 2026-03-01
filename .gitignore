@@ -4,5 +4,5 @@
 *.pyc
 
 # Ignore all CSV data files
-data/raw/
+# data/raw/
 data/processed/
