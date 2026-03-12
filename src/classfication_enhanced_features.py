@@ -19,21 +19,15 @@ from sklearn.metrics import (
 np.random.seed(42)
 
 # Load dataset
-DATA_PATH = "../data/processed/cleaned_data.csv"
+DATA_PATH = "../data/processed/enhanced_features.csv"
 
 print("Loading dataset")
 df = pd.read_csv(DATA_PATH)
 
 print("Dataset shape:", df.shape)
 
-# Baseline features
-FEATURES = [
-    "FP_IDX","FP_AMP1","FP_AMP2","FP_AMP3",
-    "STDEV_NOISE","CIR_PWR","MAX_NOISE","RXPACC",
-    "CH","FRAME_LEN","PREAM_LEN","BITRATE","PRFR"
-]
-
-X = df[FEATURES]
+X = df.drop(columns=["NLOS","RANGE"])
+feature_names = X.columns
 y = df["NLOS"]
 
 print("LOS samples:", (y==0).sum())
@@ -121,11 +115,11 @@ indices = np.argsort(importances)
 plt.figure(figsize=(10,6))
 plt.title("Feature Importance - RandomForest")
 plt.barh(range(len(indices)), importances[indices])
-plt.yticks(range(len(indices)), [FEATURES[i] for i in indices])
+plt.yticks(range(len(indices)), [feature_names[i] for i in indices])
 plt.xlabel("Importance")
 
 os.makedirs("../results/figures", exist_ok=True)
-plt.savefig("../results/figures/classification_random_forest_feature_importance.png")
+plt.savefig("../results/figures/classification_random_forest_feature_importance_enhanced_features.png")
 plt.close()
 
 # Save metrics
@@ -133,7 +127,7 @@ metrics_df = pd.DataFrame(results)
 os.makedirs("../results/metrics", exist_ok=True)
 
 metrics_df.to_csv(
-    "../results/metrics/classification_metrics.csv",
+    "../results/metrics/classification_metrics_enhanced_features.csv",
     index=False
 )
 
@@ -154,7 +148,7 @@ disp.plot()
 
 plt.title(f"Confusion Matrix ({best_model})")
 
-plt.savefig("../results/figures/classification_confusion_matrix.png")
+plt.savefig("../results/figures/classification_confusion_matrix_enhanced_features.png")
 plt.close()
 
 
@@ -178,7 +172,7 @@ plt.title("ROC Curve")
 
 plt.legend()
 
-plt.savefig("../results/figures/classification_roc_curve.png")
+plt.savefig("../results/figures/classification_roc_curve_enhanced_features.png")
 plt.close()
 
 
@@ -190,7 +184,7 @@ plt.bar(metrics_df["model"], metrics_df["accuracy"])
 plt.ylabel("Accuracy")
 plt.title("Classification Model Comparison")
 
-plt.savefig("../results/figures/classification_accuracy_comparison.png")
+plt.savefig("../results/figures/classification_accuracy_comparison_enhanced_features.png")
 plt.close()
 
 
@@ -200,8 +194,8 @@ pred_df["true_label"] = y_test.values
 pred_df["predicted_label"] = best_preds
 
 pred_df.to_csv(
-    "../results/metrics/classification_predictions.csv",
+    "../results/metrics/classification_predictions_enhanced_features.csv",
     index=False
 )
 
-print("Finished classification")
+print("Finished classification enhanced features")
