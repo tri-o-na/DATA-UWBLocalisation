@@ -36,7 +36,10 @@ df_cleaned = pd.read_csv('../data/processed/cleaned_data.csv')
 # Run the extraction
 df_engineered = extract_features(df_cleaned)
 
-target_cols = ['NLOS', 'RANGE', 'FP_AMP1', 'STDEV_NOISE'] # Add any others you want to keep
+target_cols = ['NLOS', 'RANGE', 
+               'FP_IDX', 'FP_AMP1', 'FP_AMP2', 'FP_AMP3',
+               'STDEV_NOISE', 'CIR_PWR', 'MAX_NOISE', 'RXPACC',
+               'CH', 'FRAME_LEN', 'PREAM_LEN', 'BITRATE', 'PRFR']
 df_final = pd.concat([df_cleaned[target_cols].reset_index(drop=True), df_engineered], axis=1)
 
 # Save the much smaller, high-value dataset

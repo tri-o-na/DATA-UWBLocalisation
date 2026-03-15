@@ -32,12 +32,10 @@ feature_df = pd.read_csv("../data/processed/enhanced_features.csv")
 
 # CIR engineered features
 FEATURES = [
-    "FP_AMP1",
-    "STDEV_NOISE",
-    "rms_delay",
-    "kurtosis",
-    "skewness",
-    "peak_amp"
+    "FP_IDX", "FP_AMP1", "FP_AMP2", "FP_AMP3",
+    "STDEV_NOISE", "CIR_PWR", "MAX_NOISE", "RXPACC",
+    "CH", "FRAME_LEN", "PREAM_LEN", "BITRATE", "PRFR",
+    "rms_delay", "kurtosis", "skewness", "peak_amp"
 ]
 
 # -----------------------------

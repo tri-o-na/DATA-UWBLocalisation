@@ -31,12 +31,10 @@ print("LOS samples:", len(df_los))
 
 # Engineered feature set
 FEATURES = [
-    "FP_AMP1",
-    "STDEV_NOISE",
-    "rms_delay",
-    "kurtosis",
-    "skewness",
-    "peak_amp"
+    "FP_IDX", "FP_AMP1", "FP_AMP2", "FP_AMP3",
+    "STDEV_NOISE", "CIR_PWR", "MAX_NOISE", "RXPACC",
+    "CH", "FRAME_LEN", "PREAM_LEN", "BITRATE", "PRFR",
+    "rms_delay", "kurtosis", "skewness", "peak_amp"
 ]
 
 # input -> signal features, output -> predicted distance
