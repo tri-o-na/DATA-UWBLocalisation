@@ -9,15 +9,24 @@ from sklearn.metrics import accuracy_score
 
 # 1. Load your enhanced dataset
 # This file contains both original and engineered features
-df = pd.read_csv('../data/processed/old_enhanced_features.csv').dropna()
+# 1. Load Datasets
+# Raw/Cleaned data contains the 1016 CIR samples
+df_raw = pd.read_csv('../data/processed/cleaned_data.csv').dropna()
+# Enhanced data contains your 3 engineered CIR features
+df_enhanced = pd.read_csv('../data/processed/old_enhanced_features.csv').dropna()
 
 # 2. Define the three evolutionary feature sets
-# STAGE 1: Basic Original Scalars (Baseline)
-basic_cols = ['RANGE', 'FP_AMP1', 'STDEV_NOISE']
+# STAGE 1: Basic Original Scalars + CIR vector (Baseline)
+basic_cols = [c for c in df_raw.columns if c not in ['NLOS', 'RANGE', 'FP_IDX', 'FP_AMP1', 'FP_AMP2', 'FP_AMP3',
+               'STDEV_NOISE', 'CIR_PWR', 'MAX_NOISE', 'RXPACC',
+               'CH', 'FRAME_LEN', 'PREAM_LEN', 'BITRATE', 'PRFR', 'source_file']]
 
 # STAGE 2: Feature Engineering (The "Expanded" set)
 # Includes hardware configs and all engineered features
-enhanced_cols = list(df.drop('NLOS', axis=1).columns)
+enhanced_cols = ['FP_IDX', 'FP_AMP1', 'FP_AMP2', 'FP_AMP3',
+               'STDEV_NOISE', 'CIR_PWR', 'MAX_NOISE', 'RXPACC',
+               'CH', 'FRAME_LEN', 'PREAM_LEN', 'BITRATE', 'PRFR',
+                 'rms_delay', 'kurtosis', 'skewness', 'peak_amp']
 
 # STAGE 3: Feature Optimisation (The "Pruned" set)
 # Focuses on high-value targets and engineered features while removing redundancy
@@ -26,6 +35,7 @@ optimised_cols = [
     'STDEV_NOISE', 'CIR_PWR', 'MAX_NOISE', 'RXPACC',
     'rms_delay', 'kurtosis', 'peak_amp'
 ]
+df = df_enhanced.join(df_raw[basic_cols])
 
 X = df.drop('NLOS', axis=1)
 y = df['NLOS']
